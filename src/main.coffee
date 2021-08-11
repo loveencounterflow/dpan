@@ -34,6 +34,8 @@ semver_satisfies          = require 'semver/functions/satisfies'
 semver_cmp                = require 'semver/functions/cmp'
 misfit                    = Symbol 'misfit'
 E                         = require './errors'
+{ createRequire, }        = require 'module'
+def                       = Object.defineProperty
 
 
 #===========================================================================================================
@@ -51,6 +53,12 @@ types.declare 'dpan_fs_fetch_pkg_json_info_cfg', tests:
   '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_fs_resolve_dep_fspath_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+  '@isa.nonempty_text x.dep_name':    ( x ) -> @isa.nonempty_text x.dep_name
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
     dba:          null
@@ -61,6 +69,9 @@ types.defaults =
   dpan_fs_fetch_pkg_json_info_cfg:
     pkg_fspath:   null
     fallback:     misfit
+  dpan_fs_resolve_dep_fspath_cfg:
+    pkg_fspath:   null
+    dep_name:     null
 
 
 #===========================================================================================================
@@ -77,6 +88,11 @@ class @Dpan
     #.......................................................................................................
     if @cfg.db_path?
       @dba.open { path: @cfg.db_path, }
+    #.......................................................................................................
+    ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
+    minutes when printed to console ###
+    def @, '_cache', { enumerable: false, value: {}, }
+    @_cache.custom_requires = {}
     #.......................................................................................................
     @_clear_db() if @cfg.recreate
     @_create_db_structure()
@@ -170,5 +186,13 @@ class @Dpan
       pkg_description
       pkg_keywords
       pkg_json_fspath }
+
+  #---------------------------------------------------------------------------------------------------------
+  fs_resolve_dep_fspath: ( cfg ) ->
+    validate.dpan_fs_resolve_dep_fspath_cfg cfg = { types.defaults.dpan_fs_resolve_dep_fspath_cfg..., cfg..., }
+    path  = PATH.join cfg.pkg_fspath, 'whatever' ### pkg_fspath points to pkg folder, must be one element deeper ###
+    rq    = ( @_cache.custom_requires[ path ] ?= createRequire path )
+    return rq.resolve cfg.dep_name
+
 
 
