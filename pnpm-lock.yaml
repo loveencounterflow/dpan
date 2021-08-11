@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   cnd: ^9.2.2
+  glob: ^7.1.7
   got: ^11.8.2
   icql-dba: 7.2.0
   icql-dba-tags: ^0.2.1
@@ -12,6 +13,7 @@ specifiers:
 
 dependencies:
   cnd: 9.2.2
+  glob: 7.1.7
   got: 11.8.2
   icql-dba: 7.2.0
   icql-dba-tags: 0.2.1
