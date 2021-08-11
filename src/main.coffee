@@ -65,10 +65,10 @@ types.declare 'dpan_fs_walk_dep_infos_cfg', tests:
   '@isa.object x':                    ( x ) -> @isa.object x
   '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
 
-#-----------------------------------------------------------------------------------------------------------
-types.declare 'dpan_db_add_pkg_info_cfg', tests:
-  '@isa.object x':                                  ( x ) -> @isa.object x
-  '@isa.dpan_pkg_info x.pkg_info':                  ( x ) -> @isa.dpan_pkg_info x.pkg_info
+# #-----------------------------------------------------------------------------------------------------------
+# types.declare 'dpan_db_add_pkg_info_cfg', tests:
+#   # '@isa.object x':                                  ( x ) -> @isa.object x
+#   '@isa.dpan_pkg_info x':                           ( x ) -> @isa.dpan_pkg_info x
 
 #-----------------------------------------------------------------------------------------------------------
 types.declare 'dpan_pkg_info', tests:
@@ -99,8 +99,8 @@ types.defaults =
   dpan_fs_walk_dep_infos_cfg:
     pkg_fspath:       null
     fallback:         misfit
-  dpan_db_add_pkg_info_cfg:
-    dpan_pkg_info:    null
+  # dpan_db_add_pkg_info_cfg:
+    # dpan_pkg_info:    null
   dpan_pkg_info:
     # pkg_json:       null
     pkg_name:         null
@@ -221,8 +221,8 @@ class @Dpan
   # DB
   #---------------------------------------------------------------------------------------------------------
   db_add_pkg_info: ( cfg ) ->
-    validate.dpan_db_add_pkg_info_cfg cfg = { types.defaults.dpan_db_add_pkg_info_cfg..., cfg..., }
-    { pkg_info, } = cfg
+    validate.dpan_pkg_info cfg = { types.defaults.dpan_pkg_info..., cfg..., }
+    pkg_info = cfg
     @dba.run @sql.add_pkg_name,     pkg_info
     @dba.run @sql.add_pkg_version,  pkg_info
     @dba.run @sql.add_pkg,          pkg_info
