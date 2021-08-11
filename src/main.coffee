@@ -251,6 +251,7 @@ class @Dpan
     pkg_version       = pkg_json.version
     pkg_url           = @_pkg_url_from_pkg_json pkg_json
     pkg_description   = pkg_json.description
+    pkg_description   = null if pkg_description is ''
     pkg_keywords      = pkg_json.keywords     ? []
     pkg_deps          = pkg_json.dependencies ? {}
     pkg_json_fspath   = pkg_json_info.path
