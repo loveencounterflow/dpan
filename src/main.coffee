@@ -221,3 +221,29 @@ class @Dpan
       yield dep_json_info
     return null
 
+  #=========================================================================================================
+  # RETRIEVE CANONICAL PACKAGE URL
+  #---------------------------------------------------------------------------------------------------------
+  _url_from_pkg_json_homepage: ( pkg_json ) ->
+    if ( R = pkg_json.homepage ? null )?
+      return R.replace /#readme$/, ''
+    return null
+
+  #---------------------------------------------------------------------------------------------------------
+  _url_from_pkg_json_repository: ( pkg_json ) ->
+    if ( R = pkg_json.repository?.url  ? null )?
+      return R.replace /^(git\+)?(.+?)(\.git)?$/, '$2'
+    return null
+
+  #---------------------------------------------------------------------------------------------------------
+  _url_from_pkg_json_bugs: ( pkg_json ) ->
+    if ( R = pkg_json.bugs?.url        ? null )?
+      return R.replace /\/issues$/, ''
+    return null
+
+  #---------------------------------------------------------------------------------------------------------
+  _pkg_url_from_pkg_json: ( pkg_json ) ->
+    return R if ( R = @_url_from_pkg_json_homepage    pkg_json )?
+    return R if ( R = @_url_from_pkg_json_repository  pkg_json )?
+    return R if ( R = @_url_from_pkg_json_bugs        pkg_json )?
+    return null
