@@ -1,6 +1,6 @@
 
 
-# DPAN, a **D**e**P**endancy **AN**alyzer
+# DPAN, a DePendency ANalyzer
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
