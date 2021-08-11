@@ -48,7 +48,7 @@ types.declare 'dpan_constructor_cfg', tests:
   '@isa.boolean x.recreate': ( x ) -> @isa.boolean x.recreate
 
 #-----------------------------------------------------------------------------------------------------------
-types.declare 'dpan_fs_fetch_pkg_json_info_cfg', tests:
+types.declare 'dpan_fs_fetch_pkg_info_cfg', tests:
   '@isa.object x':                    ( x ) -> @isa.object x
   '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
 
@@ -71,7 +71,7 @@ types.defaults =
     db_path:      PATH.resolve PATH.join __dirname, '../dpan.sqlite'
     recreate:     false
     registry_url: 'https://registry.npmjs.org/'
-  dpan_fs_fetch_pkg_json_info_cfg:
+  dpan_fs_fetch_pkg_info_cfg:
     pkg_fspath:   null
     fallback:     misfit
   dpan_fs_resolve_dep_fspath_cfg:
@@ -120,19 +120,23 @@ class @Dpan
           pkg_name          text    not null references #{prefix}pkg_names    ( pkg_name    ),
           pkg_version       text    not null references #{prefix}pkg_versions ( pkg_version ),
           pkg_vname         text    generated always as ( pkg_name || '@' || pkg_version ) virtual not null unique,
-          description       text,
-          url               text,
-          fspath            text,
+          pkg_description   text,
+          pkg_url           text,
+          pkg_fspath        text,
         primary key ( pkg_name, pkg_version ) );
       create unique index if not exists #{prefix}pkgs_vname_idx on #{prefix}pkgs ( pkg_vname );
       create table if not exists #{prefix}deps (
-          pkg_vname         text    not null references #{prefix}pkgs ( pkg_vname ),
-          dep_vname         text    not null references #{prefix}pkgs ( pkg_vname ),
-        primary key ( pkg_vname, dep_vname ) );
+          pkg_name          text    not null references #{prefix}pkg_names    ( pkg_name    ),
+          pkg_version       text    not null references #{prefix}pkg_versions ( pkg_version ),
+          dep_name          text    not null references #{prefix}pkg_names    ( pkg_name    ),
+          dep_svrange       text    not null references #{prefix}pkg_svranges ( pkg_svrange ),
+        primary key ( pkg_name, pkg_version, dep_name ) );
       create table if not exists #{prefix}pkg_names (
           pkg_name          text not null primary key );
       create table if not exists #{prefix}pkg_versions (
           pkg_version       text not null primary key );
+      create table if not exists #{prefix}pkg_svranges (
+          pkg_svrange       text not null primary key );
       """
     return null
 
@@ -153,18 +157,25 @@ class @Dpan
   _compile_sql: ->
     prefix = @cfg.prefix
     @sql =
-      add_pkg_version: SQL"""
-        insert into #{prefix}pkg_versions ( pkg_version )
-          values ( $pkg_version )
-          on conflict do nothing;"""
       add_pkg_name: SQL"""
         insert into #{prefix}pkg_names ( pkg_name )
           values ( $pkg_name )
           on conflict do nothing;"""
-      add_pkg: SQL"""
-        insert into #{prefix}pkgs ( pkg_name, pkg_version, description, url, fspath )
-          values ( $pkg_name, $pkg_version, $description, $url, $fspath )
+      add_pkg_version: SQL"""
+        insert into #{prefix}pkg_versions ( pkg_version )
+          values ( $pkg_version )
           on conflict do nothing;"""
+      add_pkg_svrange: SQL"""
+        insert into #{prefix}pkg_svranges ( pkg_svrange )
+          values ( $pkg_svrange )
+          on conflict do nothing;"""
+      add_pkg: SQL"""
+        insert into #{prefix}pkgs ( pkg_name, pkg_version, pkg_description, pkg_url, pkg_fspath )
+          values ( $pkg_name, $pkg_version, $pkg_description, $pkg_url, $pkg_fspath )
+          on conflict do nothing;"""
+      add_pkg_dep: SQL"""insert into #{prefix}deps ( pkg_name, pkg_version, dep_name, dep_svrange )
+        values ( $pkg_name, $pkg_version, $dep_name, $dep_svrange )
+        on conflict do nothing;"""
     return null
 
   #---------------------------------------------------------------------------------------------------------
@@ -176,16 +187,18 @@ class @Dpan
   #=========================================================================================================
   # FS
   #---------------------------------------------------------------------------------------------------------
-  fs_fetch_pkg_json_info: ( cfg ) ->
-    validate.dpan_fs_fetch_pkg_json_info_cfg cfg = { types.defaults.dpan_fs_fetch_pkg_json_info_cfg..., cfg..., }
+  fs_fetch_pkg_info: ( cfg ) ->
+    validate.dpan_fs_fetch_pkg_info_cfg cfg = { types.defaults.dpan_fs_fetch_pkg_info_cfg..., cfg..., }
     RPKGUP            = await import( 'read-pkg-up' )
-    pkg_json_info     = await RPKGUP.readPackageUpAsync { cwd: cfg.pkg_fspath, normalize: true, }
+    { pkg_fspath }    = cfg
+    pkg_json_info     = await RPKGUP.readPackageUpAsync { cwd: pkg_fspath, normalize: true, }
     unless pkg_json_info?
       return cfg.fallback unless cfg.fallback is misfit
-      throw new E.Dba_fs_pkg_json_not_found '^fs_fetch_pkg_json_info@1^', cfg.pkg_fspath
+      throw new E.Dba_fs_pkg_json_not_found '^fs_fetch_pkg_info@1^', cfg.pkg_fspath
     pkg_json          = pkg_json_info.packageJson
     pkg_name          = pkg_json.name
     pkg_version       = pkg_json.version
+    pkg_url           = @_pkg_url_from_pkg_json pkg_json
     pkg_description   = pkg_json.description
     pkg_keywords      = pkg_json.keywords     ? []
     pkg_deps          = pkg_json.dependencies ? {}
@@ -194,6 +207,8 @@ class @Dpan
       # pkg_json
       pkg_name
       pkg_version
+      pkg_url
+      pkg_fspath
       pkg_description
       pkg_keywords
       pkg_deps
@@ -211,11 +226,11 @@ class @Dpan
     validate.dpan_fs_walk_dep_infos_cfg cfg = { types.defaults.dpan_fs_walk_dep_infos_cfg..., cfg..., }
     { pkg_fspath
       fallback    }             = cfg
-    pkg_info                    = await @fs_fetch_pkg_json_info { pkg_fspath, }
-    # { pkg_json    }             = await @fs_fetch_pkg_json_info { pkg_fspath, }
+    pkg_info                    = await @fs_fetch_pkg_info { pkg_fspath, }
+    # { pkg_json    }             = await @fs_fetch_pkg_info { pkg_fspath, }
     for dep_name, dep_svrange of pkg_info.pkg_deps ? {}
       dep_fspath                = @fs_resolve_dep_fspath { pkg_fspath, dep_name, }
-      dep_json_info             = await @fs_fetch_pkg_json_info { pkg_fspath: dep_fspath, fallback, }
+      dep_json_info             = await @fs_fetch_pkg_info { pkg_fspath: dep_fspath, fallback, }
       ### TAINT `dep_svrange` is a property of the depending package, not the dependency ###
       dep_json_info.dep_svrange = dep_svrange
       yield dep_json_info
