@@ -176,15 +176,19 @@ class @Dpan
       return cfg.fallback unless cfg.fallback is misfit
       throw new E.Dba_fs_pkg_json_not_found '^fs_fetch_pkg_json_info@1^', cfg.pkg_fspath
     pkg_json          = pkg_json_info.packageJson
+    pkg_name          = pkg_json.name
     pkg_version       = pkg_json.version
     pkg_description   = pkg_json.description
-    pkg_keywords      = pkg_json.keywords ? []
+    pkg_keywords      = pkg_json.keywords     ? []
+    pkg_deps          = pkg_json.dependencies ? {}
     pkg_json_fspath   = pkg_json_info.path
     return {
-      pkg_json
+      # pkg_json
+      pkg_name
       pkg_version
       pkg_description
       pkg_keywords
+      pkg_deps
       pkg_json_fspath }
 
   #---------------------------------------------------------------------------------------------------------
