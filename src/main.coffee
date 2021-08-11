@@ -17,6 +17,8 @@ echo                      = CND.echo.bind CND
 #...........................................................................................................
 types                     = new ( require 'intertype' ).Intertype
 { isa
+  isa_list_of
+  isa_optional
   type_of
   validate
   validate_list_of }      = types.export()
@@ -64,22 +66,51 @@ types.declare 'dpan_fs_walk_dep_infos_cfg', tests:
   '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_db_add_pkg_info_cfg', tests:
+  '@isa.object x':                                  ( x ) -> @isa.object x
+  '@isa.dpan_pkg_info x.pkg_info':                  ( x ) -> @isa.dpan_pkg_info x.pkg_info
+
+#-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_pkg_info', tests:
+  '@isa.object x':                                  ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_version':               ( x ) -> @isa.nonempty_text x.pkg_version
+  '@isa_optional.nonempty_text x.pkg_fspath':       ( x ) -> @isa_optional.nonempty_text x.pkg_fspath
+  '@isa_optional.nonempty_text x.pkg_url':          ( x ) -> @isa_optional.nonempty_text x.pkg_url
+  '@isa_optional.nonempty_text x.pkg_fspath':       ( x ) -> @isa_optional.nonempty_text x.pkg_fspath
+  '@isa_optional.nonempty_text x.pkg_description':  ( x ) -> @isa_optional.nonempty_text x.pkg_description
+  '@isa_list_of.nonempty_text x.pkg_keywords':      ( x ) -> @isa_list_of.nonempty_text x.pkg_keywords
+  '@isa.object x.pkg_deps':                         ( x ) -> @isa.object x.pkg_deps
+  '@isa.nonempty_text x.pkg_json_fspath':           ( x ) -> @isa.nonempty_text x.pkg_json_fspath
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
-    dba:          null
-    prefix:       'dpan_'
-    db_path:      PATH.resolve PATH.join __dirname, '../dpan.sqlite'
-    recreate:     false
-    registry_url: 'https://registry.npmjs.org/'
+    dba:              null
+    prefix:           'dpan_'
+    db_path:          PATH.resolve PATH.join __dirname, '../dpan.sqlite'
+    recreate:         false
+    registry_url:     'https://registry.npmjs.org/'
   dpan_fs_fetch_pkg_info_cfg:
-    pkg_fspath:   null
-    fallback:     misfit
+    pkg_fspath:       null
+    fallback:         misfit
   dpan_fs_resolve_dep_fspath_cfg:
-    pkg_fspath:   null
-    dep_name:     null
+    pkg_fspath:       null
+    dep_name:         null
   dpan_fs_walk_dep_infos_cfg:
-    pkg_fspath:   null
-    fallback:     misfit
+    pkg_fspath:       null
+    fallback:         misfit
+  dpan_db_add_pkg_info_cfg:
+    dpan_pkg_info:    null
+  dpan_pkg_info:
+    # pkg_json:       null
+    pkg_name:         null
+    pkg_version:      null
+    pkg_url:          null
+    pkg_fspath:       null
+    pkg_description:  null
+    pkg_keywords:     null
+    pkg_deps:         null
+    pkg_json_fspath:  null
 
 
 #===========================================================================================================
@@ -149,6 +180,7 @@ class @Dpan
       drop table if exists #{prefix}deps;
       drop table if exists #{prefix}pkgs;
       drop table if exists #{prefix}pkg_names;
+      drop table if exists #{prefix}pkg_svranges;
       drop table if exists #{prefix}pkg_versions;
       """
     return null
@@ -183,6 +215,25 @@ class @Dpan
     @dba.create_function name: 'semver_satisfies', call: ( version, pattern ) =>
       return 1 if semver_satisfies version, pattern
       return 0
+
+
+  #=========================================================================================================
+  # DB
+  #---------------------------------------------------------------------------------------------------------
+  db_add_pkg_info: ( cfg ) ->
+    validate.dpan_db_add_pkg_info_cfg cfg = { types.defaults.dpan_db_add_pkg_info_cfg..., cfg..., }
+    { pkg_info, } = cfg
+    @dba.run @sql.add_pkg_name,     pkg_info
+    @dba.run @sql.add_pkg_version,  pkg_info
+    @dba.run @sql.add_pkg,          pkg_info
+    #.......................................................................................................
+    for dep_name, dep_svrange of pkg_info.pkg_deps
+      @dba.run @sql.add_pkg_name,     { pkg_name: dep_name, }
+      @dba.run @sql.add_pkg_svrange,  { pkg_svrange: dep_svrange, }
+      @dba.run @sql.add_pkg_dep,      { pkg_info..., dep_name, dep_svrange, }
+    #.......................................................................................................
+    return null
+
 
   #=========================================================================================================
   # FS
@@ -237,7 +288,7 @@ class @Dpan
     return null
 
   #=========================================================================================================
-  # RETRIEVE CANONICAL PACKAGE URL
+  # RETRIEVING CANONICAL PACKAGE URL
   #---------------------------------------------------------------------------------------------------------
   _url_from_pkg_json_homepage: ( pkg_json ) ->
     if ( R = pkg_json.homepage ? null )?
