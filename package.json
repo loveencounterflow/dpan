@@ -1,0 +1,38 @@
+{
+  "name": "dpan",
+  "version": "0.0.1",
+  "description": "DePendencyANalyzer, an SQLite-based database of your projects' npm dependency trees",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "echo see 'https://github.com/loveencounterflow/hengist/tree/master/dev/dpan'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loveencounterflow/dpan.git"
+  },
+  "keywords": [
+    "sqlite",
+    "sql",
+    "db",
+    "npm",
+    "dependency",
+    "tree",
+    "transitive-dependencies"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loveencounterflow/dpan/issues"
+  },
+  "homepage": "https://github.com/loveencounterflow/dpan#readme",
+  "dependencies": {
+    "cnd": "^9.2.2",
+    "got": "^11.8.2",
+    "icql-dba": "7.2.0",
+    "icql-dba-tags": "^0.2.1",
+    "intertype": "^7.6.7",
+    "letsfreezethat": "^3.1.0",
+    "read-pkg-up": "^8.0.0",
+    "semver": "^7.3.5"
+  }
+}
