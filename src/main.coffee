@@ -73,6 +73,7 @@ types.declare 'dpan_fs_walk_dep_infos_cfg', tests:
 #-----------------------------------------------------------------------------------------------------------
 types.declare 'dpan_pkg_info', tests:
   '@isa.object x':                                  ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_name':                  ( x ) -> @isa.nonempty_text x.pkg_name
   '@isa.nonempty_text x.pkg_version':               ( x ) -> @isa.nonempty_text x.pkg_version
   '@isa_optional.nonempty_text x.pkg_fspath':       ( x ) -> @isa_optional.nonempty_text x.pkg_fspath
   '@isa_optional.nonempty_text x.pkg_url':          ( x ) -> @isa_optional.nonempty_text x.pkg_url
