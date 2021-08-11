@@ -32,6 +32,7 @@ FS                        = require 'fs'
 got                       = require 'got'
 semver_satisfies          = require 'semver/functions/satisfies'
 semver_cmp                = require 'semver/functions/cmp'
+E                         = require './errors'
 
 
 #===========================================================================================================
