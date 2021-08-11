@@ -14,6 +14,7 @@
 
 ## What It Is
 
+**D**e**P**endancy **AN**alyzer, an SQLite-based database of your projects' npm dependency trees
 
 ## To Do
 
