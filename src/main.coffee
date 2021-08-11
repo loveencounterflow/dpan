@@ -59,6 +59,11 @@ types.declare 'dpan_fs_resolve_dep_fspath_cfg', tests:
   '@isa.nonempty_text x.dep_name':    ( x ) -> @isa.nonempty_text x.dep_name
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_fs_walk_dep_infos_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
     dba:          null
@@ -72,6 +77,9 @@ types.defaults =
   dpan_fs_resolve_dep_fspath_cfg:
     pkg_fspath:   null
     dep_name:     null
+  dpan_fs_walk_dep_infos_cfg:
+    pkg_fspath:   null
+    fallback:     misfit
 
 
 #===========================================================================================================
@@ -198,5 +206,18 @@ class @Dpan
     rq    = ( @_cache.custom_requires[ path ] ?= createRequire path )
     return rq.resolve cfg.dep_name
 
-
+  #---------------------------------------------------------------------------------------------------------
+  fs_walk_dep_infos: ( cfg ) ->
+    validate.dpan_fs_walk_dep_infos_cfg cfg = { types.defaults.dpan_fs_walk_dep_infos_cfg..., cfg..., }
+    { pkg_fspath
+      fallback    }             = cfg
+    pkg_info                    = await @fs_fetch_pkg_json_info { pkg_fspath, }
+    # { pkg_json    }             = await @fs_fetch_pkg_json_info { pkg_fspath, }
+    for dep_name, dep_svrange of pkg_info.pkg_deps ? {}
+      dep_fspath                = @fs_resolve_dep_fspath { pkg_fspath, dep_name, }
+      dep_json_info             = await @fs_fetch_pkg_json_info { pkg_fspath: dep_fspath, fallback, }
+      ### TAINT `dep_svrange` is a property of the depending package, not the dependency ###
+      dep_json_info.dep_svrange = dep_svrange
+      yield dep_json_info
+    return null
 
