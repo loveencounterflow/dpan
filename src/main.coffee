@@ -32,6 +32,7 @@ FS                        = require 'fs'
 got                       = require 'got'
 semver_satisfies          = require 'semver/functions/satisfies'
 semver_cmp                = require 'semver/functions/cmp'
+misfit                    = Symbol 'misfit'
 E                         = require './errors'
 
 
@@ -45,6 +46,11 @@ types.declare 'dpan_constructor_cfg', tests:
   '@isa.boolean x.recreate': ( x ) -> @isa.boolean x.recreate
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_fs_fetch_pkg_json_info_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
     dba:          null
@@ -52,15 +58,17 @@ types.defaults =
     db_path:      PATH.resolve PATH.join __dirname, '../dpan.sqlite'
     recreate:     false
     registry_url: 'https://registry.npmjs.org/'
+  dpan_fs_fetch_pkg_json_info_cfg:
+    pkg_fspath:   null
+    fallback:     misfit
 
 
 #===========================================================================================================
-class Dpan
+class @Dpan
 
   #---------------------------------------------------------------------------------------------------------
   constructor: ( cfg ) ->
     validate.dpan_constructor_cfg @cfg = { types.defaults.dpan_constructor_cfg..., cfg..., }
-    debug '^4877^', @cfg
     #.......................................................................................................
     dba  = if @cfg.dba? then @cfg.dba else new Dba()
     def @, 'dba', { enumerable: false, value: dba, }
@@ -76,6 +84,9 @@ class Dpan
     @_create_sql_functions()
     return undefined
 
+
+  #=========================================================================================================
+  # DDL
   #---------------------------------------------------------------------------------------------------------
   _create_db_structure: ->
     ### TAINT unify name / pkg_name, version / pkg_version ###
@@ -137,3 +148,27 @@ class Dpan
     @dba.create_function name: 'semver_satisfies', call: ( version, pattern ) =>
       return 1 if semver_satisfies version, pattern
       return 0
+
+  #=========================================================================================================
+  # FS
+  #---------------------------------------------------------------------------------------------------------
+  fs_fetch_pkg_json_info: ( cfg ) ->
+    validate.dpan_fs_fetch_pkg_json_info_cfg cfg = { types.defaults.dpan_fs_fetch_pkg_json_info_cfg..., cfg..., }
+    RPKGUP            = await import( 'read-pkg-up' )
+    pkg_json_info     = await RPKGUP.readPackageUpAsync { cwd: cfg.pkg_fspath, normalize: true, }
+    unless pkg_json_info?
+      return cfg.fallback unless cfg.fallback is misfit
+      throw new E.Dba_fs_pkg_json_not_found '^fs_fetch_pkg_json_info@1^', cfg.pkg_fspath
+    pkg_json          = pkg_json_info.packageJson
+    pkg_version       = pkg_json.version
+    pkg_description   = pkg_json.description
+    pkg_keywords      = pkg_json.keywords ? []
+    pkg_json_fspath   = pkg_json_info.path
+    return {
+      pkg_json
+      pkg_version
+      pkg_description
+      pkg_keywords
+      pkg_json_fspath }
+
+
