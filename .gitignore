@@ -126,3 +126,4 @@ __pycache__/
 .yalc
 
 /data
+/dpan.sqlite
