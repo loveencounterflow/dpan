@@ -1,6 +1,6 @@
 {
   "name": "dpan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "DePendencyANalyzer, an SQLite-based database of your projects' npm dependency trees",
   "main": "lib/main.js",
   "scripts": {
