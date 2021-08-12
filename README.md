@@ -28,5 +28,9 @@
 
 * [ ] implement
 * [ ] document
+* [ ] add property `dba` to `Dpan::constructor()` to pass configuration directly to ICQL/DBA
+
+
+
 
 
