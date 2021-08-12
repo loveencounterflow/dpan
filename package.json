@@ -31,6 +31,7 @@
     "got": "^11.8.2",
     "icql-dba": "7.2.0",
     "icql-dba-tags": "^0.2.1",
+    "icql-dba-vars": "1.0.0",
     "intertype": "^7.6.7",
     "letsfreezethat": "^3.1.0",
     "read-pkg-up": "^8.0.0",

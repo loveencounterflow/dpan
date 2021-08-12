@@ -6,6 +6,7 @@ specifiers:
   got: ^11.8.2
   icql-dba: 7.2.0
   icql-dba-tags: ^0.2.1
+  icql-dba-vars: 1.0.0
   intertype: ^7.6.7
   letsfreezethat: ^3.1.0
   read-pkg-up: ^8.0.0
@@ -17,6 +18,7 @@ dependencies:
   got: 11.8.2
   icql-dba: 7.2.0
   icql-dba-tags: 0.2.1
+  icql-dba-vars: 1.0.0
   intertype: 7.6.7
   letsfreezethat: 3.1.0
   read-pkg-up: 8.0.0
@@ -414,6 +416,15 @@ packages:
 
   /icql-dba-tags/0.2.1:
     resolution: {integrity: sha512-w0BidjKvVCQFt74qCxLdJTH8KH0Q+/egYrcPLz1DLNAQ4+9ebcQI7NzfpcVT6TudIMKjfNJ36HwXPySfZQ09wA==}
+    dependencies:
+      cnd: 9.2.2
+      icql-dba: 7.2.0
+      intertype: 7.6.7
+      letsfreezethat: 3.1.0
+    dev: false
+
+  /icql-dba-vars/1.0.0:
+    resolution: {integrity: sha512-iJt+7Toju4iwqTAjjQJQerNKqGqRfFTaU0flgK9iJEh1Xifj/Kw0W6hk1IMWBzQDrTzeO70ukCd3NtJj4Hv18Q==}
     dependencies:
       cnd: 9.2.2
       icql-dba: 7.2.0
