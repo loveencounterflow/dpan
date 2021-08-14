@@ -27,6 +27,7 @@ SQL                       = String.raw
 { lets
   freeze }                = require 'letsfreezethat'
 { Dba, }                  = require 'icql-dba'
+{ Dbv, }                  = require 'icql-dba-vars'
 def                       = Object.defineProperty
 glob                      = require 'glob'
 PATH                      = require 'path'
@@ -126,6 +127,7 @@ class @Dpan
     delete @cfg.dba
     @cfg  = freeze @cfg
     #.......................................................................................................
+    @v = new Dbv { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###
@@ -181,6 +183,7 @@ class @Dpan
       drop table if exists #{prefix}pkg_names;
       drop table if exists #{prefix}pkg_svranges;
       drop table if exists #{prefix}pkg_versions;
+      drop table if exists #{prefix}variables;
       """
     return null
 
