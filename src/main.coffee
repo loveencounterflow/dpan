@@ -127,7 +127,7 @@ class @Dpan
     delete @cfg.dba
     @cfg  = freeze @cfg
     #.......................................................................................................
-    @v = new Dbv { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
+    @vars = new Dbv { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###
