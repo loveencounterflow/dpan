@@ -42,12 +42,13 @@ def                       = Object.defineProperty
 
 #===========================================================================================================
 types.declare 'dpan_constructor_cfg', tests:
-  '@isa.object x':        ( x ) -> @isa.object x
-  'x.prefix is a prefix': ( x ) ->
+  '@isa.object x':                ( x ) -> @isa.object x
+  'x.prefix is a prefix':         ( x ) ->
     return false unless @isa.text x.prefix
     return true if x.prefix is ''
     return ( /^[_a-z][_a-z0-9]*$/ ).test x.prefix
-  '@isa.boolean x.recreate': ( x ) -> @isa.boolean x.recreate
+  '@isa.boolean x.recreate':      ( x ) -> @isa.boolean x.recreate
+  "( @type_of x.dba ) is 'dba'":  ( x ) -> ( @type_of x.dba ) is 'dba'
 
 #-----------------------------------------------------------------------------------------------------------
 types.declare 'dpan_fs_fetch_pkg_info_cfg', tests:
@@ -121,13 +122,10 @@ class @Dpan
   constructor: ( cfg ) ->
     validate.dpan_constructor_cfg @cfg = { types.defaults.dpan_constructor_cfg..., cfg..., }
     #.......................................................................................................
-    dba  = if @cfg.dba? then @cfg.dba else new Dba()
-    def @, 'dba', { enumerable: false, value: dba, }
+    def @, 'dba', { enumerable: false, value: cfg.dba, }
     delete @cfg.dba
-    @cfg = freeze @cfg
+    @cfg  = freeze @cfg
     #.......................................................................................................
-    if @cfg.db_path?
-      @dba.open { path: @cfg.db_path, }
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###

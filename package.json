@@ -29,12 +29,17 @@
     "cnd": "^9.2.2",
     "glob": "^7.1.7",
     "got": "^11.8.2",
-    "icql-dba": "7.2.0",
     "icql-dba-tags": "^0.2.1",
     "icql-dba-vars": "1.0.0",
     "intertype": "^7.6.7",
     "letsfreezethat": "^3.1.0",
     "read-pkg-up": "^8.0.0",
     "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "icql-dba": "^7.2.0"
+  },
+  "peerDependencies": {
+    "icql-dba": "^7.2.0"
   }
 }
