@@ -127,6 +127,7 @@ class @Dpan
     delete @cfg.dba
     @cfg  = freeze @cfg
     #.......................................................................................................
+    @_clear_db() if @cfg.recreate
     @vars = new Dbv { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
@@ -134,7 +135,6 @@ class @Dpan
     def @, '_cache', { enumerable: false, value: {}, }
     @_cache.custom_requires = {}
     #.......................................................................................................
-    @_clear_db() if @cfg.recreate
     @_create_db_structure()
     @_compile_sql()
     @_create_sql_functions()
