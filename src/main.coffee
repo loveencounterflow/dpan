@@ -28,6 +28,7 @@ SQL                       = String.raw
   freeze }                = require 'letsfreezethat'
 { Dba, }                  = require 'icql-dba'
 { Dbv, }                  = require 'icql-dba-vars'
+{ Dtags, }                = require 'icql-dba-tags'
 def                       = Object.defineProperty
 glob                      = require 'glob'
 PATH                      = require 'path'
@@ -128,7 +129,8 @@ class @Dpan
     @cfg  = freeze @cfg
     #.......................................................................................................
     @_clear_db() if @cfg.recreate
-    @vars = new Dbv { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
+    @vars = new Dbv   { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
+    @tags = new Dtags { dba: @dba, prefix: @cfg.prefix, } ### create tagging tables ###
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###
@@ -183,7 +185,14 @@ class @Dpan
       drop table if exists #{prefix}pkg_names;
       drop table if exists #{prefix}pkg_svranges;
       drop table if exists #{prefix}pkg_versions;
+      -- ...................................................................................................
       drop table if exists #{prefix}variables;
+      -- ...................................................................................................
+      drop view  if exists #{prefix}_potential_inflection_points;
+      drop view  if exists #{prefix}tags_and_rangelists;
+      drop table if exists #{prefix}contiguous_ranges;
+      drop table if exists #{prefix}tagged_ranges;
+      drop table if exists #{prefix}tags;
       """
     return null
 
