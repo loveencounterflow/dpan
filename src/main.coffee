@@ -29,7 +29,6 @@ SQL                       = String.raw
 { Dba, }                  = require 'icql-dba'
 { Dbv, }                  = require 'icql-dba-vars'
 { Dtags, }                = require 'icql-dba-tags'
-def                       = Object.defineProperty
 glob                      = require 'glob'
 PATH                      = require 'path'
 FS                        = require 'fs'
@@ -39,7 +38,7 @@ semver_cmp                = require 'semver/functions/cmp'
 misfit                    = Symbol 'misfit'
 E                         = require './errors'
 { createRequire, }        = require 'module'
-def                       = Object.defineProperty
+guy                       = require 'guy'
 
 
 #===========================================================================================================
@@ -124,7 +123,7 @@ class @Dpan
   constructor: ( cfg ) ->
     validate.dpan_constructor_cfg @cfg = { types.defaults.dpan_constructor_cfg..., cfg..., }
     #.......................................................................................................
-    def @, 'dba', { enumerable: false, value: cfg.dba, }
+    guy.props.def @, 'dba', { enumerable: false, value: cfg.dba, }
     delete @cfg.dba
     @cfg  = freeze @cfg
     #.......................................................................................................
@@ -134,7 +133,7 @@ class @Dpan
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###
-    def @, '_cache', { enumerable: false, value: {}, }
+    guy.props.def @, '_cache', { enumerable: false, value: {}, }
     @_cache.custom_requires = {}
     #.......................................................................................................
     @_create_db_structure()
@@ -199,7 +198,7 @@ class @Dpan
   #---------------------------------------------------------------------------------------------------------
   _compile_sql: ->
     prefix = @cfg.prefix
-    @sql =
+    sql =
       add_pkg_name: SQL"""
         insert into #{prefix}pkg_names ( pkg_name )
           values ( $pkg_name )
@@ -219,6 +218,7 @@ class @Dpan
       add_pkg_dep: SQL"""insert into #{prefix}deps ( pkg_name, pkg_version, dep_name, dep_svrange )
         values ( $pkg_name, $pkg_version, $dep_name, $dep_svrange )
         on conflict do nothing;"""
+    guy.props.def @, 'sql', { enumerable: false, value: sql, }
     return null
 
   #---------------------------------------------------------------------------------------------------------
