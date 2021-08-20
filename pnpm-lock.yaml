@@ -5,9 +5,10 @@ specifiers:
   glob: ^7.1.7
   got: ^11.8.2
   guy: ^1.0.0
-  icql-dba: ^7.2.0
+  icql-dba: 8.1.0
+  icql-dba-tabulate: ^2.0.0
   icql-dba-tags: 1.0.0
-  icql-dba-vars: 2.0.0
+  icql-dba-vars: 2.0.1
   intertype: ^7.6.7
   letsfreezethat: ^3.1.0
   read-pkg-up: ^8.0.0
@@ -18,15 +19,16 @@ dependencies:
   glob: 7.1.7
   got: 11.8.2
   guy: 1.0.0
-  icql-dba-tags: 1.0.0_icql-dba@7.2.0
-  icql-dba-vars: 2.0.0_icql-dba@7.2.0
+  icql-dba-tabulate: 2.0.0_icql-dba@8.1.0
+  icql-dba-tags: 1.0.0_icql-dba@8.1.0
+  icql-dba-vars: 2.0.1_icql-dba@8.1.0
   intertype: 7.6.7
   letsfreezethat: 3.1.0
   read-pkg-up: 8.0.0
   semver: 7.3.5
 
 devDependencies:
-  icql-dba: 7.2.0
+  icql-dba: 8.1.0
 
 packages:
 
@@ -117,6 +119,12 @@ packages:
       '@types/node': 16.4.13
     dev: false
 
+  /@uppy/fs-tail-stream/1.2.0:
+    resolution: {integrity: sha512-Yil6Z4phfYBHneLK5aimQ4AtVleorcTRuy0TzJrhFx4OEdbGUQ8haLQklQUOhaFJbaeu20VGishz/kLWzQiiTg==}
+    dependencies:
+      once: 1.4.0
+    dev: false
+
   /aggregate-error/3.1.0:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
@@ -124,6 +132,11 @@ packages:
       clean-stack: 2.2.0
       indent-string: 4.0.0
     dev: true
+
+  /ansi-regex/5.0.0:
+    resolution: {integrity: sha512-bY6fj56OUQ0hU1KjFNDQuJFezqKdrAyFdIevADiqrWHwSlbmBNMHp5ak2f40Pm8JTFyM2mqxkG6ngkHO11f/lg==}
+    engines: {node: '>=8'}
+    dev: false
 
   /ansi-styles/3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
@@ -194,7 +207,6 @@ packages:
   /cnd/9.2.1:
     resolution: {integrity: sha512-JszZtSlOCxkIvNPKpw1PmIcQUjYO+pBqVoKVH2STHLtG4JHHJ1NHowv39lhyxzlPxUTZk7pZ3qO7CfrfJ8ZSKw==}
     hasBin: true
-    dev: true
 
   /cnd/9.2.2:
     resolution: {integrity: sha512-F+/H+7luk4fZkvN0+MT0I2nwn80YM/EtfMttNUFxENR50XJH4g0KgQevzeyEJ8B6t6l8Tb4Xti6QAksa8DmePA==}
@@ -228,6 +240,25 @@ packages:
       minimist: 1.2.5
     dev: true
 
+  /cupofjoe/0.2.1:
+    resolution: {integrity: sha512-kZHlb3DmPu2jV0rmZvqsGwI8OEy+VEyN+50bUFp95HrD1buun7G9BVpf286UiL+sNfjXEn4EdbAFHASkxibSHQ==}
+    dependencies:
+      cnd: 9.2.1
+      intertype: 7.6.5
+      multimix: 5.0.0
+    dev: false
+
+  /datom/8.0.3:
+    resolution: {integrity: sha512-brh+I+TIC89r891ekwWtzaO6zvQu/hgyEdfm3gs8WOF3jJ+nCpwnoF2/96jUZibaKCfFjxpqQbQu3K7/SkA64g==}
+    dependencies:
+      cnd: 9.2.2
+      cupofjoe: 0.2.1
+      emittery: 0.6.0
+      intertype: 7.6.5
+      letsfreezethat: 3.1.0
+      multimix: 5.0.0
+    dev: false
+
   /decompress-response/6.0.0:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
     engines: {node: '>=10'}
@@ -260,6 +291,15 @@ packages:
     dependencies:
       path-type: 4.0.0
     dev: true
+
+  /emittery/0.6.0:
+    resolution: {integrity: sha512-6EMRGr9KzYWp8DzHFZsKVZBsMO6QhAeHMeHND8rhyBNCHKMLpgW9tZv40bwN3rAIKRS5CxcK8oLRKUJSB9h7yQ==}
+    engines: {node: '>=10'}
+    dev: false
+
+  /emoji-regex/8.0.0:
+    resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
+    dev: false
 
   /end-of-stream/1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
@@ -381,7 +421,6 @@ packages:
     dependencies:
       cnd: 9.2.2
       intertype: 7.6.7
-    dev: false
 
   /has-flag/3.0.0:
     resolution: {integrity: sha1-tdRU3CGZriJWmfNGfloH87lVuv0=}
@@ -421,40 +460,63 @@ packages:
       resolve-alpn: 1.2.0
     dev: false
 
-  /icql-dba-tags/1.0.0_icql-dba@7.2.0:
+  /icql-dba-tabulate/2.0.0_icql-dba@8.1.0:
+    resolution: {integrity: sha512-uREsIzC4Cx26i8imtEbdil3EQSTmILJSLbPhqpT6ARaTjNU5EQuWit1BFllXRUPCzmXGur8dSnGaAjF1zQAuRA==}
+    peerDependencies:
+      icql-dba: ^8.1.0
+    dependencies:
+      cnd: 9.2.2
+      datom: 8.0.3
+      guy: 1.0.0
+      icql-dba: 8.1.0
+      intertype: 7.6.7
+      letsfreezethat: 3.1.0
+      steampipes: 6.7.1
+      to-width: 1.1.0
+    transitivePeerDependencies:
+      - deasync
+    dev: false
+
+  /icql-dba-tags/1.0.0_icql-dba@8.1.0:
     resolution: {integrity: sha512-MOk/3/u8e+G0UzgUaqVUO4W5+mC2KSnLkftTWTvndxxDBt5xWcWmjKre0+e6O1nAKK2aLxppb0ji/vsFdNsymw==}
     peerDependencies:
       icql-dba: ^7.2.0
     dependencies:
       cnd: 9.2.2
-      icql-dba: 7.2.0
+      icql-dba: 8.1.0
       intertype: 7.6.7
       letsfreezethat: 3.1.0
     dev: false
 
-  /icql-dba-vars/2.0.0_icql-dba@7.2.0:
-    resolution: {integrity: sha512-omWq+RWciiYjFHxqZp5QVCH9Fggggupep5uzRqmUE7aV7iW1pFuYQQA8nYwdJ2I1B+X/ygjyhw8eCsTOcGxfSA==}
+  /icql-dba-vars/2.0.1_icql-dba@8.1.0:
+    resolution: {integrity: sha512-VCJCd9GVWCoGZUwrwz8qxUniJwn5rdrQtsOPnHDgZJbShT3oYcur01oYONJhprJ9lFDpl9jx8JFWr2NC8VyCxQ==}
     peerDependencies:
       icql-dba: ^7.2.0
     dependencies:
       cnd: 9.2.2
-      icql-dba: 7.2.0
+      guy: 1.0.0
+      icql-dba: 8.1.0
       intertype: 7.6.7
       letsfreezethat: 3.1.0
+    transitivePeerDependencies:
+      - deasync
     dev: false
 
-  /icql-dba/7.2.0:
-    resolution: {integrity: sha512-LYBNHL1U1Xo+Xx93Lm3ZLh9I+E5j1oa/mPM07BMQyAOehClXpbM5/1UXEGvqDZYzGVZ9BlKKbkYHKcqjMBeb6w==}
+  /icql-dba/8.1.0:
+    resolution: {integrity: sha512-bOcnDYQpweONs9LAcjDbCv+07pVDf4I2mzDjZ7AKRmatGZd1lHBpW4HpW0zVSiRj23vunJwnyJrz/lIgkfhb9g==}
     requiresBuild: true
     dependencies:
       cnd: 9.2.2
       csv-parser: 3.0.0
+      guy: 1.0.0
       hollerith-codec: 3.0.1
       intertype: 7.6.7
       letsfreezethat: 3.1.0
       mysql-tokenizer: 1.0.7
       n-readlines: 1.0.1
       tempy: 1.0.1
+    transitivePeerDependencies:
+      - deasync
     dev: true
 
   /ignore/5.1.8:
@@ -476,11 +538,17 @@ packages:
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  /intertext-splitlines/1.2.1:
+    resolution: {integrity: sha512-bnIqoTOk8ie/jE3g4ec7h5ZdjpUNF+ynQ0/oTwn3I973vhCjMtnd9DCp/i1hxVMO55uqDgyYQ42f44Quzc6zXg==}
+    dependencies:
+      cnd: 9.2.2
+      intertype: 7.6.5
+    dev: false
+
   /intertype/7.6.5:
     resolution: {integrity: sha512-763YK3ezLYy9FkX+cTTg/qwGHteqlaTMiec9a2sVAKm7kXp9e7QkzbyYS6u4CcbLxx12L8bcRbe3SFsPeaJCMA==}
     dependencies:
       multimix: 5.0.0
-    dev: true
 
   /intertype/7.6.7:
     resolution: {integrity: sha512-vBgYabqxX3fLa9f0Z3QeXgYszadAGdAHXdLcdQc5ZxZSG5CmbJCdYcudZLYtgmNo8epQag8zzyg7wwx+OD5J8g==}
@@ -501,6 +569,11 @@ packages:
     resolution: {integrity: sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /is-fullwidth-code-point/3.0.0:
+    resolution: {integrity: sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==}
+    engines: {node: '>=8'}
+    dev: false
 
   /is-glob/4.0.1:
     resolution: {integrity: sha512-5G0tKtBTFImOqDnLB2hG6Bp2qcKEFduo4tZu9MT/H6NQv/ghhy30o55ufafxJ/LdH79LLs2Kfrn85TLKyA7BUg==}
@@ -528,6 +601,13 @@ packages:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
     dev: true
+
+  /jfee/0.1.4:
+    resolution: {integrity: sha512-XM3NLlcQGunAXg2c4Os28LWzLjbnrQE7NMwc4q38hgsAbTMIKu1IXceEz4sVXp55fU4Q0c+8+5OgMWxRgnpFNw==}
+    dependencies:
+      cnd: 9.2.2
+      intertype: 7.6.5
+    dev: false
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -804,6 +884,35 @@ packages:
     resolution: {integrity: sha512-oie3/+gKf7QtpitB0LYLETe+k8SifzsX4KixvpOsbI6S0kRiRQ5MKOio8eMSAKQ17N06+wdEOXRiId+zOxo0hA==}
     dev: false
 
+  /steampipes/6.7.1:
+    resolution: {integrity: sha512-glgBCkjJr+0MeEiIc5UD4HMVIVNrGYYJ7QhylARTNksPTp59+HW/qIhPd/3xWEaHWjxkEsbM4zigCurmZifYrA==}
+    dependencies:
+      '@uppy/fs-tail-stream': 1.2.0
+      cnd: 9.2.2
+      datom: 8.0.3
+      intertext-splitlines: 1.2.1
+      intertype: 7.6.5
+      jfee: 0.1.4
+      multimix: 5.0.0
+      timsort: 0.3.0
+    dev: false
+
+  /string-width/4.2.1:
+    resolution: {integrity: sha512-LL0OLyN6AnfV9xqGQpDBwedT2Rt63737LxvsRxbcwpa2aIeynBApG2Sm//F3TaLHIR1aJBN52DWklc06b94o5Q==}
+    engines: {node: '>=8'}
+    dependencies:
+      emoji-regex: 8.0.0
+      is-fullwidth-code-point: 3.0.0
+      strip-ansi: 6.0.0
+    dev: false
+
+  /strip-ansi/6.0.0:
+    resolution: {integrity: sha512-AuvKTrTfQNYNIctbR1K/YGTR1756GycPsg7b9bdV9Duqur4gv6aKqHXah67Z8ImS7WEz5QVcOtlfW2rZEugt6w==}
+    engines: {node: '>=8'}
+    dependencies:
+      ansi-regex: 5.0.0
+    dev: false
+
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
     engines: {node: '>=4'}
@@ -827,12 +936,24 @@ packages:
       unique-string: 2.0.0
     dev: true
 
+  /timsort/0.3.0:
+    resolution: {integrity: sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=}
+    dev: false
+
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
     dev: true
+
+  /to-width/1.1.0:
+    resolution: {integrity: sha512-zN1F5YSsKkI8MW+JGOE3neo3SVGUODZhMqjiEV7a2LSaAFjUkN1hcsv7Y+PJSayxAJ6ZmppfQZc4TuOAW8wIwg==}
+    dependencies:
+      cnd: 9.2.1
+      string-width: 4.2.1
+      wcstring: 2.1.1
+    dev: false
 
   /type-fest/0.16.0:
     resolution: {integrity: sha512-eaBzG6MxNzEn9kiwvtre90cXaNLkmadMWa1zQMs3XORCXNbsH/OewwbxC5ia9dCxIxnTAsSxXJaa/p5y8DlvJg==}
@@ -856,6 +977,21 @@ packages:
     dependencies:
       spdx-correct: 3.1.1
       spdx-expression-parse: 3.0.1
+    dev: false
+
+  /varsize-string/2.2.2:
+    resolution: {integrity: sha1-7xs7bHLbCDXqL4TN+R/sMMUgaIs=}
+    dev: false
+
+  /wcsize/1.0.0:
+    resolution: {integrity: sha1-qKLhXmqKdHkdulgPaaV9J+hQ6h4=}
+    dev: false
+
+  /wcstring/2.1.1:
+    resolution: {integrity: sha1-3tUtdFycceJNCkidKCbSKjZe0Gc=}
+    dependencies:
+      varsize-string: 2.2.2
+      wcsize: 1.0.0
     dev: false
 
   /wrappy/1.0.2:
