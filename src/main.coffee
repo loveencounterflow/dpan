@@ -346,6 +346,7 @@ class @Dpan
   # RETRIEVE GIT INFOS
   #---------------------------------------------------------------------------------------------------------
   git_fetch_pkg_status: ( cfg ) ->
+    throw new E.Dba_not_implemented '^git_fetch_pkg_status@1^', 'git_fetch_pkg_status()'
     validate.dpan_git_fetch_pkg_status_cfg cfg = { types.defaults.dpan_git_fetch_pkg_status_cfg..., cfg..., }
     { pkg_fspath }    = cfg
     debug '^8878^', cfg
