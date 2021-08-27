@@ -27,6 +27,7 @@
   "homepage": "https://github.com/loveencounterflow/dpan#readme",
   "dependencies": {
     "cnd": "^9.2.2",
+    "git-utils": "^5.7.3",
     "glob": "^7.1.7",
     "got": "^11.8.2",
     "guy": "^1.0.0",
