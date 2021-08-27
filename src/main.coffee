@@ -86,6 +86,16 @@ types.declare 'dpan_pkg_info', tests:
   '@isa.nonempty_text x.pkg_json_fspath':           ( x ) -> @isa.nonempty_text x.pkg_json_fspath
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_git_fetch_pkg_status_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+
+#-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_git_get_dirty_counts_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
     dba:              null
@@ -114,6 +124,11 @@ types.defaults =
     pkg_keywords:     null
     pkg_deps:         null
     pkg_json_fspath:  null
+  dpan_git_fetch_pkg_status_cfg:
+    pkg_fspath:       null
+  dpan_git_get_dirty_counts_cfg:
+    pkg_fspath:       null
+    fallback:         misfit
 
 
 #===========================================================================================================
@@ -325,3 +340,27 @@ class @Dpan
     return R if ( R = @_url_from_pkg_json_repository  pkg_json )?
     return R if ( R = @_url_from_pkg_json_bugs        pkg_json )?
     return null
+
+
+  #=========================================================================================================
+  # RETRIEVE GIT INFOS
+  #---------------------------------------------------------------------------------------------------------
+  git_fetch_pkg_status: ( cfg ) ->
+    validate.dpan_git_fetch_pkg_status_cfg cfg = { types.defaults.dpan_git_fetch_pkg_status_cfg..., cfg..., }
+    { pkg_fspath }    = cfg
+    debug '^8878^', cfg
+
+  #---------------------------------------------------------------------------------------------------------
+  git_get_dirty_counts: ( cfg ) ->
+    ### see hengist/dev/snippets/src/demo-node-git-modules ###
+    validate.dpan_git_get_dirty_counts_cfg cfg = { types.defaults.dpan_git_get_dirty_counts_cfg..., cfg..., }
+    GU          = require 'git-utils'
+    repo        = GU.open cfg.pkg_fspath
+    unless repo?
+      return cfg.fallback unless cfg.fallback is misfit
+      throw new E.Dba_git_not_a_repo '^git_fetch_dirty_count@1^', cfg.pkg_fspath
+    abc         = repo.getAheadBehindCount 'HEAD'
+    acc         = abc.ahead                                 ### ACC, ahead-commit  count ###
+    bcc         = abc.behind                                ### BCC, behind-commit count ###
+    dfc         = ( Object.keys repo.getStatus() ).length   ### DFC, dirty file    count ###
+    return { acc, bcc, dfc, sum: ( acc + bcc + dfc ), }

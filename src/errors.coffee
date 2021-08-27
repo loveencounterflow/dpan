@@ -25,3 +25,5 @@ class @Dba_error extends Error
 #-----------------------------------------------------------------------------------------------------------
 class @Dba_fs_pkg_json_not_found   extends @Dba_error
   constructor: ( ref, pkg_fspath )     -> super ref, "unable to locate package.json for path #{pkg_fspath}"
+class @Dba_git_not_a_repo          extends @Dba_error
+  constructor: ( ref, pkg_fspath )     -> super ref, "not a git repository: #{pkg_fspath}"
