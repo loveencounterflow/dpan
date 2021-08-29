@@ -26,11 +26,12 @@
 
 ## To Do
 
-* [ ] implement
-* [ ] document
-* [ ] add property `dba` to `Dpan::constructor()` to pass configuration directly to ICQL/DBA
-* [ ] fetch data from `https://registry.npmjs.cf/$pkg_name`
-
-
+* **[–]** implement
+* **[–]** document
+* **[–]** add property `dba` to `Dpan::constructor()` to pass configuration directly to ICQL/DBA
+* **[–]** fetch data from `https://registry.npmjs.cf/$pkg_name`
+* **[–]** provide info about vulnerabilities
+  * **[–]** from GitHub
+  * **[–]** from npm
 
 
