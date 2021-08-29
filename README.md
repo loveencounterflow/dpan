@@ -33,5 +33,9 @@
 * **[–]** provide info about vulnerabilities
   * **[–]** from GitHub
   * **[–]** from npm
+* **[–]** package manager used (npm/pnpm/yarn...)
+* **[–]** circular dependencies
+
+
 
 
