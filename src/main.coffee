@@ -96,6 +96,11 @@ types.declare 'dpan_git_get_dirty_counts_cfg', tests:
   '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
 
 #-----------------------------------------------------------------------------------------------------------
+types.declare 'dpan_git_get_staged_file_paths_cfg', tests:
+  '@isa.object x':                    ( x ) -> @isa.object x
+  '@isa.nonempty_text x.pkg_fspath':  ( x ) -> @isa.nonempty_text x.pkg_fspath
+
+#-----------------------------------------------------------------------------------------------------------
 types.defaults =
   dpan_constructor_cfg:
     dba:              null
@@ -125,6 +130,8 @@ types.defaults =
     pkg_deps:         null
     pkg_json_fspath:  null
   dpan_git_fetch_pkg_status_cfg:
+    pkg_fspath:       null
+  dpan_git_get_staged_file_paths_cfg:
     pkg_fspath:       null
   dpan_git_get_dirty_counts_cfg:
     pkg_fspath:       null
@@ -365,3 +372,17 @@ class @Dpan
     bcc         = abc.behind                                ### BCC, behind-commit count ###
     dfc         = ( Object.keys repo.getStatus() ).length   ### DFC, dirty file    count ###
     return { acc, bcc, dfc, sum: ( acc + bcc + dfc ), }
+
+  #---------------------------------------------------------------------------------------------------------
+  git_get_staged_file_paths: ( cfg ) ->
+    validate.dpan_git_get_staged_file_paths_cfg cfg = { types.defaults.dpan_git_get_staged_file_paths_cfg..., cfg..., }
+    GU          = require 'git-utils'
+    repo        = GU.open cfg.pkg_fspath
+    unless repo?
+      return cfg.fallback unless cfg.fallback is misfit
+      throw new E.Dba_git_not_a_repo '^git_fetch_dirty_count@1^', cfg.pkg_fspath
+    return ( path for path, status of repo.getStatus() when repo.isStatusStaged( status ) )
+
+
+
+
