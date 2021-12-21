@@ -28,21 +28,16 @@
   "dependencies": {
     "cnd": "^9.2.2",
     "git-utils": "^5.7.3",
-    "glob": "^7.1.7",
-    "got": "^11.8.2",
-    "guy": "^1.0.0",
+    "glob": "7.2.0",
+    "got": "11.8.2",
+    "guy": "3.1.0",
+    "icql-dba": "^10.1.0",
     "icql-dba-tabulate": "^2.0.0",
-    "icql-dba-tags": "1.0.0",
+    "icql-dba-tags": "1.0.1",
     "icql-dba-vars": "2.0.1",
-    "intertype": "^7.6.7",
+    "intertype": "7.7.0",
     "letsfreezethat": "^3.1.0",
     "read-pkg-up": "^8.0.0",
     "semver": "^7.3.5"
-  },
-  "devDependencies": {
-    "icql-dba": "8.1.0"
-  },
-  "peerDependencies": {
-    "icql-dba": "8.1.0"
   }
 }
