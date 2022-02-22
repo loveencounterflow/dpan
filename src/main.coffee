@@ -371,6 +371,16 @@ class @Dpan
     acc         = abc.ahead                                 ### ACC, ahead-commit  count ###
     bcc         = abc.behind                                ### BCC, behind-commit count ###
     dfc         = ( Object.keys repo.getStatus() ).length   ### DFC, dirty file    count ###
+    # echo '^4645645^', ( require 'util').inspect repo.getStatus()
+    # debug '^4645645^', repo.getStatus 'fonts/schäffel.ch/1455_gutenberg_b42.otf'
+    # debug '^4645645^', repo.getPath()
+    # debug '^4645645^', ( k for k of repo )
+    # for path, status of repo.getStatus()
+    #   is_deleted   = repo.isStatusDeleted(status)
+    #   is_ignored   = repo.isStatusIgnored(status)
+    #   is_modified  = repo.isStatusModified(status)
+    #   is_new       = repo.isStatusNew(status)
+    #   urge '^3475938^', status, path, { is_deleted, is_ignored, is_modified, is_new, }
     return { acc, bcc, dfc, sum: ( acc + bcc + dfc ), }
 
   #---------------------------------------------------------------------------------------------------------

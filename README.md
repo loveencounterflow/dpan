@@ -35,6 +35,27 @@
   * **[–]** from npm
 * **[–]** package manager used (npm/pnpm/yarn...)
 * **[–]** circular dependencies
+* **[–]** try to handle spurious changes caused by Unicode Normalization on some file systems (e.g. APFS);
+  case in point is
+  [dbay-rustybuzz](https://github.com/loveencounterflow/dbay-rustybuzz/tree/7987afbdf57fcffcb996cd410fe55cf4f1c2395f)
+  which has some filenames with `ä`; originally entered as single codepoint, the `ä` is turned into a
+  sequence of base letter plus combining diacritic. This change is *not* reported by `git status`, but
+  `git-utils` `repo.getStatus()` returns an object like this:
+
+  ```
+  { 'fonts/schäffel.ch/1455_gutenberg_b42.otf': 128,
+    'fonts/schäffel.ch/1458_gutenberg_b36.otf': 128,
+    'fonts/schäffel.ch/2002_horatius.otf': 128,
+    'fonts/schäffel.ch/LICENSE.txt': 128,
+    'fonts/schäffel.ch/1455_gutenberg_b42.otf': 512,
+    'fonts/schäffel.ch/1458_gutenberg_b36.otf': 512,
+    'fonts/schäffel.ch/2002_horatius.otf': 512,
+    'fonts/schäffel.ch/LICENSE.txt': 512 }
+  ```
+
+  where the files in question both have a `deleted` and a `new` marker. One should suspect this being
+  a flaw in either `git` or in [`git-utils`](http://libgit2.github.com/); also check how
+  [`nodegit`][https://github.com/nodegit/nodegit] deals with this situation.
 
 
 
