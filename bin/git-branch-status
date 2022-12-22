@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# branch=$(git rev-parse --abbrev-ref HEAD)
+# echo "Branch: $branch"
+
+git status -sb
+
+git rev-list --left-right --count master...origin/master
+
+
