@@ -374,6 +374,20 @@ class @Dpan
     return { acc, bcc, dfc, sum: ( acc + bcc + dfc ), }
 
   #---------------------------------------------------------------------------------------------------------
+  git_get_log: ( cfg ) ->
+    ### see hengist/dev/snippets/src/demo-node-git-modules ###
+    { Git } = require 'kaseki'
+    try
+      repo    = new Git { work_path: cfg.pkg_fspath, repo_path: cfg.pkg_fspath, }
+      return repo.log cfg
+    catch error
+      warn CND.reverse error.message
+      return cfg.fallback if cfg?.fallback? and cfg.fallback isnt misfit
+      throw error
+      # throw new E.Dba_git_not_a_repo '^git_fetch_dirty_count@1^', cfg.pkg_fspath
+    return null
+
+  #---------------------------------------------------------------------------------------------------------
   git_get_staged_file_paths: ( cfg ) ->
     validate.dpan_git_get_staged_file_paths_cfg cfg = { types.defaults.dpan_git_get_staged_file_paths_cfg..., cfg..., }
     GU          = require 'git-utils'
