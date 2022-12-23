@@ -360,25 +360,17 @@ class @Dpan
   git_get_dirty_counts: ( cfg ) ->
     ### see hengist/dev/snippets/src/demo-node-git-modules ###
     validate.dpan_git_get_dirty_counts_cfg cfg = { types.defaults.dpan_git_get_dirty_counts_cfg..., cfg..., }
-    GU          = require 'git-utils'
-    repo        = GU.open cfg.pkg_fspath
-    unless repo?
+    { Git } = require 'kaseki'
+    try
+      repo    = new Git { work_path: cfg.pkg_fspath, repo_path: cfg.pkg_fspath, }
+      status  = repo.status()
+    catch error
+      warn CND.reverse error.message
       return cfg.fallback unless cfg.fallback is misfit
       throw new E.Dba_git_not_a_repo '^git_fetch_dirty_count@1^', cfg.pkg_fspath
-    abc         = repo.getAheadBehindCount 'HEAD'
-    acc         = abc.ahead                                 ### ACC, ahead-commit  count ###
-    bcc         = abc.behind                                ### BCC, behind-commit count ###
-    dfc         = ( Object.keys repo.getStatus() ).length   ### DFC, dirty file    count ###
-    # echo '^4645645^', ( require 'util').inspect repo.getStatus()
-    # debug '^4645645^', repo.getStatus 'fonts/schäffel.ch/1455_gutenberg_b42.otf'
-    # debug '^4645645^', repo.getPath()
-    # debug '^4645645^', ( k for k of repo )
-    # for path, status of repo.getStatus()
-    #   is_deleted   = repo.isStatusDeleted(status)
-    #   is_ignored   = repo.isStatusIgnored(status)
-    #   is_modified  = repo.isStatusModified(status)
-    #   is_new       = repo.isStatusNew(status)
-    #   urge '^3475938^', status, path, { is_deleted, is_ignored, is_modified, is_new, }
+    acc         = status.ahead_count    ### ACC, ahead-commit  count ###
+    bcc         = status.behind_count   ### BCC, behind-commit count ###
+    dfc         = status.dirty_count    ### DFC, dirty file    count ###
     return { acc, bcc, dfc, sum: ( acc + bcc + dfc ), }
 
   #---------------------------------------------------------------------------------------------------------
