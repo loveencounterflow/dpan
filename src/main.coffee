@@ -26,9 +26,7 @@ types                     = new ( require 'intertype' ).Intertype
 SQL                       = String.raw
 { lets
   freeze }                = require 'letsfreezethat'
-{ Dba, }                  = require 'icql-dba'
-{ Dbv, }                  = require 'icql-dba-vars'
-{ Dtags, }                = require 'icql-dba-tags'
+{ DBay, }                 = require 'dbay'
 glob                      = require 'glob'
 PATH                      = require 'path'
 FS                        = require 'fs'
@@ -49,7 +47,7 @@ types.declare 'dpan_constructor_cfg', tests:
     return true if x.prefix is ''
     return ( /^[_a-z][_a-z0-9]*$/ ).test x.prefix
   '@isa.boolean x.recreate':      ( x ) -> @isa.boolean x.recreate
-  "( @type_of x.dba ) is 'dba'":  ( x ) -> ( @type_of x.dba ) is 'dba'
+  "( @type_of x.dba ) is 'dbay'": ( x ) -> ( @type_of x.dba ) is 'dbay'
 
 #-----------------------------------------------------------------------------------------------------------
 types.declare 'dpan_fs_fetch_pkg_info_cfg', tests:
@@ -150,8 +148,8 @@ class @Dpan
     @cfg  = freeze @cfg
     #.......................................................................................................
     @_clear_db() if @cfg.recreate
-    @vars = new Dbv   { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
-    @tags = new Dtags { dba: @dba, prefix: @cfg.prefix, } ### create tagging tables ###
+    # @vars = new Dbv   { dba: @dba, prefix: @cfg.prefix, } ### create table `dpan_variables` ###
+    # @tags = new Dtags { dba: @dba, prefix: @cfg.prefix, } ### create tagging tables ###
     #.......................................................................................................
     ### NOTE avoid to make cache displayable as it contains huge objects that block the process for
     minutes when printed to console ###
@@ -213,7 +211,7 @@ class @Dpan
       drop view  if exists #{prefix}tags_and_rangelists;
       drop table if exists #{prefix}contiguous_ranges;
       drop table if exists #{prefix}tagged_ranges;
-      drop table if exists #{prefix}tags;
+      -- drop table if exists #{prefix}tags;
       """
     return null
 
