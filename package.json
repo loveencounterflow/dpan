@@ -26,18 +26,15 @@
   },
   "homepage": "https://github.com/loveencounterflow/dpan#readme",
   "dependencies": {
-    "cnd": "^9.2.2",
-    "git-utils": "^5.7.3",
+    "cnd": "^9.2.3",
+    "dbay": "^15.2.1",
     "glob": "7.2.0",
     "got": "11.8.2",
     "guy": "3.1.0",
-    "icql-dba": "^10.1.0",
-    "icql-dba-tabulate": "^2.0.0",
-    "icql-dba-tags": "1.0.1",
-    "icql-dba-vars": "2.0.1",
     "intertype": "7.7.0",
+    "kaseki": "^0.3.0",
     "letsfreezethat": "^3.1.0",
     "read-pkg-up": "^8.0.0",
-    "semver": "^7.3.5"
+    "semver": "^7.3.8"
   }
 }
