@@ -32,7 +32,7 @@
     "got": "11.8.2",
     "guy": "3.1.0",
     "intertype": "7.7.0",
-    "kaseki": "^0.4.0",
+    "kaseki": "^0.5.0",
     "letsfreezethat": "^3.1.0",
     "read-pkg-up": "^8.0.0",
     "semver": "^7.3.8"
