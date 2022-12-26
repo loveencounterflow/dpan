@@ -7,7 +7,7 @@ specifiers:
   got: 11.8.2
   guy: 3.1.0
   intertype: 7.7.0
-  kaseki: ^0.5.0
+  kaseki: ^0.6.0
   letsfreezethat: ^3.1.0
   read-pkg-up: ^8.0.0
   semver: ^7.3.8
@@ -19,7 +19,7 @@ dependencies:
   got: 11.8.2
   guy: 3.1.0
   intertype: 7.7.0
-  kaseki: 0.5.0
+  kaseki: 0.6.0
   letsfreezethat: 3.1.0
   read-pkg-up: 8.0.0
   semver: 7.3.8
@@ -596,8 +596,8 @@ packages:
     resolution: {integrity: sha512-uPc/Q90XqZoRE7Cu1OLFQB2cSrA2Dy8+okzPOtML8vbagNFDSipbndIPme+q0odBjEhL+wf3WH3Wo52was4Tsg==}
     dev: false
 
-  /kaseki/0.5.0:
-    resolution: {integrity: sha512-8vyHYTUicdbEmXqE6Billo2iX2uBnHIjC7HkZ/4IjZ72E551dC95oK6N3wVkprhh9OyojWS0gESpKuzIZwhCZA==}
+  /kaseki/0.6.0:
+    resolution: {integrity: sha512-f3Mti0l/yXAeVGjMdYz1WYThsYMkohd9WlNWm8fCtIsn9MZMrasVQMwrhHlzix8ASddsSW+rGqBjN8Mpakk/XA==}
     dependencies:
       dayjs: 1.11.7
       guy: 12.4.0_dayjs@1.11.7
