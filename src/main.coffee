@@ -381,8 +381,8 @@ class @Dpan
       repo    = new Git { work_path: cfg.pkg_fspath, repo_path: cfg.pkg_fspath, }
       return repo.log cfg
     catch error
-      warn CND.reverse error.message
-      return cfg.fallback if cfg?.fallback? and cfg.fallback isnt misfit
+      warn 'Ωdpm___2', CND.reverse error.message
+      return cfg.fallback if ( cfg?.fallback isnt misfit )
       throw error
       # throw new E.Dba_git_not_a_repo '^git_fetch_dirty_count@1^', cfg.pkg_fspath
     return null
